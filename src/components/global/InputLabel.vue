@@ -1,9 +1,8 @@
 <template>
   <div class="mt-4">
-
     <label :for="id" class="block text-gray-700">{{ label }}</label>
     <input type="text" :value="modelValue" @input="$emit('update:modelValue', $event.target.value)"
-    :placeholder="placeholder" class="w-full border border-gray-300 rounded p-2" />
+      :placeholder="placeholder" class="w-full border border-gray-300 rounded p-2" />
   </div>
 </template>
 
@@ -22,21 +21,3 @@ export default {
   name: "InputLabel",
 };
 </script>
-
-<!-- <template>
-  <div class="mt-4">
-    <label :for="id" class="block text-gray-700">{{ label }}</label>
-    <input :id="id" :value="value" @input="$emit('update:value', $event)" type="text"
-      class="w-full border border-gray-300 rounded p-2" />
-  </div>
-</template>
-
-<script>
-export default {
-  props: {
-    id: String,
-    label: String,
-    value: String,
-  },
-};
-</script> -->
