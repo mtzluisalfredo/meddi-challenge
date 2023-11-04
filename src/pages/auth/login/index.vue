@@ -1,8 +1,8 @@
 <template>
   <div class="flex items-center justify-center">
     <div class="bg-white p-8 rounded-lg shadow-lg w-96">
-      <img src="https://www.finware.mx/images/logo-finware-header.svg" alt="Logo de la Compañía"
-        class="w-20 h-20 mx-auto mb-4" />
+      <img src="https://meddi.app/public/loginv2/assets/MeddiLogo.8349898f.png" alt="Logo de la Compañía"
+        class="h-20 mx-auto mb-4" />
 
       <h2 class="text-2xl font-semibold mb-4">Iniciar Sesión</h2>
       <form @submit.prevent="login">
