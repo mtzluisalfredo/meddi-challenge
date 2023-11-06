@@ -1,5 +1,3 @@
-import { useAuthStore } from '~/store/auth';
-
 export const useHttp = async (
   url: string,
   {
@@ -14,7 +12,6 @@ export const useHttp = async (
     fileUpload?: boolean;
   } = { method: "get" }
 ) => {
-  const authStore = storeToRefs(useAuthStore());
   const config = useRuntimeConfig();
   const token = useCookie("token", {
     domain: config.public.session_domain as string | undefined,

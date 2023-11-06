@@ -1,6 +1,5 @@
 import { useAPI } from "../api/useAPI";
 
-
 export interface IHospital {
   name: string;
   direccion: string;
@@ -9,6 +8,8 @@ export interface IHospital {
   urlGoogleMaps: string;
   long: string;
   lat: string;
+  idHospital?: string;
+  id?: string;
 }
 export interface IHospitalResponse {
   currentPage: number;
@@ -32,9 +33,21 @@ export const useHospitalStore = defineStore("hospital", {
       this.loading = true;
       const { request } = useAPI();
 
-      const { response } = await request.post('/hospital/create', { ...payload });
+      await request.post('/hospital/create', { ...payload });
+
       this.toggleModal(false);
+
       await this.getAllhospitals({ page: 1 });
+    },
+    async updateHospital({ idHospital, ...payload }: IHospital) {
+      this.loading = true;
+      const { request } = useAPI();
+
+      await request.put(`/hospital/update/${idHospital}`, { ...payload });
+
+      this.toggleModal(false);
+
+      await this.getAllhospitals({ page: this.response.currentPage });
     },
     async getAllhospitals({ page = 1, rowsPerPage = 10 } = {}) {
       this.loading = true;

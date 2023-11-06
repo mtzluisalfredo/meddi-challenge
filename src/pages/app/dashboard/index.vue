@@ -21,10 +21,11 @@ import HospitalRegistration from '~/components/dashboard/HospitalRegistration.vu
 import { useHospitalStore } from '~/store/hospital';
 
 const columns = ["name", "telefono", "horario"];
-const counterStore = useHospitalStore();
+const hospitalStore = useHospitalStore();
 const isCreate = ref(false)
 
 const hospital = ref({
+  _id: '',
   name: '',
   direccion: '',
   telefono: '',
@@ -34,15 +35,17 @@ const hospital = ref({
   lat: ''
 });
 
-const itemsTable = computed(() => counterStore?.response?.itemsTable || []);
-const totalPages = computed(() => counterStore?.response?.totalPages || 0);
-const total = computed(() => counterStore?.response?.total || 0);
-const currentPage = computed(() => counterStore?.response?.currentPage || 0);
-const isModalOpen = computed(() => counterStore?.isModalOpen);
+const itemsTable = computed(() => hospitalStore?.response?.itemsTable || []);
+const totalPages = computed(() => hospitalStore?.response?.totalPages || 0);
+const total = computed(() => hospitalStore?.response?.total || 0);
+const currentPage = computed(() => hospitalStore?.response?.currentPage || 0);
+const isModalOpen = computed(() => hospitalStore?.isModalOpen);
 
 
 const handleClickItem = (values: any) => {
   const [long, lat] = values?.location?.coordinates || [];
+  hospital.value = values;
+
   hospital.value.name = values.name || '';
   hospital.value.direccion = values.direccion || '';
   hospital.value.telefono = values.telefono || '';
@@ -50,27 +53,32 @@ const handleClickItem = (values: any) => {
   hospital.value.urlGoogleMaps = values.urlGoogleMaps || '';
   hospital.value.long = long || '0';
   hospital.value.lat = lat || '0';
-  counterStore.toggleModal(true);
+  hospitalStore.toggleModal(true);
 };
 
 const handleOpenModalCreate = () => {
   isCreate.value = true;
-  counterStore.toggleModal(true);
+  hospitalStore.toggleModal(true);
 }
 
 const hlandleCreate = async (params: any) => {
-  await counterStore.createHospital(params);
+  if (isCreate.value) {
+    await hospitalStore.createHospital(params);
+  } else {
+    hospitalStore.updateHospital({ idHospital: hospital?.value?._id, ...hospital.value })
+
+  }
 };
 
 const handleGetAllhospitals = async () => {
-  await counterStore.getAllhospitals();
+  await hospitalStore.getAllhospitals();
 };
 
 const handleNext = async () => {
-  await counterStore.getAllhospitals({ page: currentPage.value + 1 });
+  await hospitalStore.getAllhospitals({ page: currentPage.value + 1 });
 };
 const handlePrev = async () => {
-  await counterStore.getAllhospitals({ page: currentPage.value - 1 });
+  await hospitalStore.getAllhospitals({ page: currentPage.value - 1 });
 }
 
 onMounted(() => {
@@ -81,7 +89,7 @@ const toggleModal = (v: boolean = false) => {
   if (!v) {
     isCreate.value = false;
   }
-  counterStore.toggleModal(v);
+  hospitalStore.toggleModal(v);
 };
 
 definePageMeta({

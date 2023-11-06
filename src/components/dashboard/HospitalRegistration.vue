@@ -1,6 +1,6 @@
 <template>
   <Modal :isModalOpen="isModalOpen">
-    <h3 class="text-2xl font-semibold">Registrar Hospital</h3>
+    <h3 class="text-2xl font-semibold">{{ isCreate ? 'Registrar Hospital' : 'Actualizar Hospital' }}</h3>
     <form @submit.prevent="submitHospital">
 
       <InputLabel id="name" v-model:modelValue="formData.name" label="Nombre" />
@@ -12,7 +12,7 @@
       <InputLabel id="lat" v-model:modelValue="formData.lat" label="Latitud" />
       <div class="mt-4 flex justify-between space-x-4">
         <button type="submit" class="w-1/2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
-          Registrar
+          {{ isCreate ? 'Registrar' : 'Actualizar' }}
         </button>
         <button @click="closeModal"
           class="w-1/2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-full">
@@ -62,21 +62,17 @@ export default {
     };
   },
   computed: {
-    hospitalData() {
+    formData(): { [key: string]: any } | null {
       return this.isCreate ? {} : this.hospital;
     },
   },
   methods: {
     submitHospital() {
-      console.log(this.formData)
       this.submitFunction(this.formData);
     },
     closeModal() {
       this.closeModal(); // Llama a la función closeModal pasada como prop
     },
   },
-  onMounted() {
-    console.log(this.hospital)
-  }
 };
 </script>

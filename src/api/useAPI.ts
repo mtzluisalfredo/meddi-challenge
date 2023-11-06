@@ -78,8 +78,26 @@ export const useAPI = () => {
     return { errors, loading, status, response };
   };
 
+  const put = async (endpoint?: string, body?: { [x: string]: any }) => {
+    const res = await useHttp(`${generateApiUrl({ body, endpoint })}`, {
+      method: 'put',
+      body,
+    });
 
-  const request = { get, post }
+    status = res.success;
+
+    if (res.success) {
+      response = res.data.data;
+    } else {
+      errors = res.data;
+    }
+    loading = false;
+
+    return { errors, loading, status, response };
+  };
+
+
+  const request = { get, post, put }
 
   return { request };
 };
