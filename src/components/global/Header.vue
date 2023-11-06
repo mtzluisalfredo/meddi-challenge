@@ -1,7 +1,7 @@
 <template>
   <header class="bg-nepal-300 p-4 px-24 flex items-center justify-between">
     <div class="flex items-center space-x-2 h-7">
-      <img :src="logo" alt="Logo de la App" class="w-20" />
+      <img :src="useAsset(logo)" alt="meddie logo" class="w-20" />
       <h1 v-if="title && !!isAuth" class="text-black text-lg font-semibold">
         {{ title }}
       </h1>
@@ -15,6 +15,8 @@
 </template>
 
 <script lang="ts">
+import { useAuthStore } from '~/store/auth';
+
 export default {
   name: 'Header',
   props: {
@@ -23,15 +25,22 @@ export default {
       required: true,
     },
     title: {
-      type: String
+      type: String,
+      default: ''
     },
     isAuth: {
       type: Boolean,
     }
   },
-  data() {
+  setup() {
+    definePageMeta({
+      middleware: 'auth'
+    })
+    const { logUserIn, loading, authenticated } = useAuthStore();
+
     return {
-      isAuth: false, // Reemplaza esto con tu lógica de autenticación
+      isAuth: authenticated,
+      loading,
       navigationLinks: [
         { text: "Inicio", link: "/" },
         { text: "Acerca", link: "/acerca" },
@@ -39,6 +48,6 @@ export default {
         // Agrega más enlaces según sea necesario
       ]
     };
-  }
+  },
 };
 </script>

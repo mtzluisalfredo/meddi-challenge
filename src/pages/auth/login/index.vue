@@ -39,7 +39,6 @@ import { useAuthStore } from '~/store/auth';
 export default {
   setup() {
     definePageMeta({
-      layout: 'auth',
       middleware: 'auth'
     })
     const { logUserIn, loading } = useAuthStore();

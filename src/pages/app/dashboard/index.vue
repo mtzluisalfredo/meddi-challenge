@@ -17,7 +17,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import HospitalRegistration from '~/components/dashboard/HospitalRegistration.vue';
-import { useHospitalStore, type IHospital } from '~/store/hospital';
+import { useHospitalStore } from '~/store/hospital';
 
 const counterStore = useHospitalStore();
 const isModalOpen = ref(false);
