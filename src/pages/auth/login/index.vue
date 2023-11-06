@@ -37,14 +37,14 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useAuthStore } from '~/store/auth';
-const counterStore = useAuthStore();
+const authStore = useAuthStore();
 const email = ref('');
 const password = ref('');
 
-const loading = computed(() => !!counterStore?.loading);
+const loading = computed(() => !!authStore?.loading);
 
 const login = async () => {
-  counterStore.logUserIn({
+  authStore.logUserIn({
     username: email.value,
     password: password.value
   });
