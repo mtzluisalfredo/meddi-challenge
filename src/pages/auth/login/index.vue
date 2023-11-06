@@ -19,9 +19,11 @@
             required />
         </div>
         <button type="submit"
-          class="w-full bg-blue-500 text-white rounded-md py-2 font-semibold hover:bg-blue-600 transition duration-300"
+          class="w-full bg-blue-500  text-white rounded-md py-2 font-semibold hover:bg-blue-600 transition duration-300"
           :disabled="loading">
-          <span v-if="loading">Cargando...</span>
+          <span v-if="loading" class="flex justify-center">
+            <Spinner :show="loading" /> Cargando...
+          </span>
           <span v-else>Iniciar Sesión</span>
         </button>
       </form>
@@ -32,32 +34,23 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { ref } from 'vue';
 import { useAuthStore } from '~/store/auth';
+const counterStore = useAuthStore();
+const email = ref('');
+const password = ref('');
 
-export default {
-  setup() {
-    definePageMeta({
-      middleware: 'auth'
-    })
-    const { logUserIn, loading } = useAuthStore();
+const loading = computed(() => !!counterStore?.loading);
 
-    const email = ref('');
-    const password = ref('');
-
-    const login = async () => {
-      logUserIn({
-        username: email.value,
-        password: password.value
-      });
-    };
-    return {
-      email,
-      password,
-      login,
-      loading,
-    };
-  },
+const login = async () => {
+  counterStore.logUserIn({
+    username: email.value,
+    password: password.value
+  });
 };
+
+definePageMeta({
+  middleware: 'auth'
+});
 </script>

@@ -9,7 +9,7 @@
     <HospitalRegistration :isModalOpen="isModalOpen" :hospital="hospital" :closeModal="openModal"
       :onClickRegister="hlandleCreate" :submitFunction="hlandleCreate" />
     <Table :columns='["name", "telefono", "horario"]' :onClickItem="handleClickItem" :itemsTable="itemsTable"
-      :itemsPerPage="10" />
+      :total="total" :currentPage="currentPage" :totalPages="totalPages" :onNext="handleNext" :onPreve="handlePrev" />
 
   </Layout>
 </template>
@@ -32,6 +32,10 @@ const hospital = ref({
 });
 
 const itemsTable = computed(() => counterStore?.response?.itemsTable || []);
+const totalPages = computed(() => counterStore?.response?.totalPages || 0);
+const total = computed(() => counterStore?.response?.total || 0);
+const currentPage = computed(() => counterStore?.response?.currentPage || 0);
+
 
 const hlandleCreate = async (params: any) => {
   console.log("🚀 ~ file: index.vue:30 ~ login ~ params:", params)
@@ -52,6 +56,13 @@ const handleClickItem = (values: any) => {
 const handleGetAllhospitals = async () => {
   await counterStore.getAllhospitals();
 };
+
+const handleNext = async () => {
+  await counterStore.getAllhospitals({ page: currentPage.value + 1 });
+};
+const handlePrev = async () => {
+  await counterStore.getAllhospitals({ page: currentPage.value - 1 });
+}
 
 onMounted(() => {
   handleGetAllhospitals();

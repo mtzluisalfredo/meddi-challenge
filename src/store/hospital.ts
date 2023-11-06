@@ -24,11 +24,11 @@ export const useHospitalStore = defineStore("hospital", {
     errors: ref<object>({}),
   }),
   actions: {
-    async getAllhospitals() {
+    async getAllhospitals({ page = 1, rowsPerPage = 10 } = {}) {
       this.loading = true;
       const { request } = useAPI();
 
-      const { response } = await request.get('/hospital/get/all')
+      const { response } = await request.get('/hospital/get/all', { page, rowsPerPage })
       const itemsTable = response.data;
 
       this.response = { ...response, itemsTable };
