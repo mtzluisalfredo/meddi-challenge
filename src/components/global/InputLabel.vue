@@ -1,6 +1,6 @@
 <template>
   <div class="mt-4">
-    <label :for="id" class="block text-gray-700">{{ label }}</label>
+    <label class="block text-gray-700">{{ label }}</label>
     <input type="text" :value="modelValue" @input="$emit('update:modelValue', $event.target.value)"
       :placeholder="placeholder" class="w-full border border-gray-300 rounded p-2" />
   </div>

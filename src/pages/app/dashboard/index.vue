@@ -2,14 +2,15 @@
   <Layout>
     <h1>Hospitales</h1>
     <div class="flex justify-end py-3 pl-2">
-      <button @click="openModal(true)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">
+      <button @click="handleOpenModalCreate"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">
         Registrar Hospital
       </button>
     </div>
-    <HospitalRegistration :isModalOpen="isModalOpen" :hospital="hospital" :closeModal="openModal"
-      :onClickRegister="hlandleCreate" :submitFunction="hlandleCreate" />
-    <Table :columns='["name", "telefono", "horario"]' :onClickItem="handleClickItem" :itemsTable="itemsTable"
-      :total="total" :currentPage="currentPage" :totalPages="totalPages" :onNext="handleNext" :onPreve="handlePrev" />
+    <HospitalRegistration :isCreate="isCreate" :isModalOpen="isModalOpen" :hospital="hospital" :closeModal="toggleModal"
+      :submitFunction="hlandleCreate" />
+    <Table :columns='columns' :onClickItem="handleClickItem" :itemsTable="itemsTable" :total="total"
+      :currentPage="currentPage" :totalPages="totalPages" :onNext="handleNext" :onPreve="handlePrev" />
 
   </Layout>
 </template>
@@ -19,8 +20,10 @@ import { ref, onMounted } from 'vue';
 import HospitalRegistration from '~/components/dashboard/HospitalRegistration.vue';
 import { useHospitalStore } from '~/store/hospital';
 
+const columns = ["name", "telefono", "horario"];
 const counterStore = useHospitalStore();
-const isModalOpen = ref(false);
+const isCreate = ref(false)
+
 const hospital = ref({
   name: '',
   direccion: '',
@@ -35,11 +38,8 @@ const itemsTable = computed(() => counterStore?.response?.itemsTable || []);
 const totalPages = computed(() => counterStore?.response?.totalPages || 0);
 const total = computed(() => counterStore?.response?.total || 0);
 const currentPage = computed(() => counterStore?.response?.currentPage || 0);
+const isModalOpen = computed(() => counterStore?.isModalOpen);
 
-
-const hlandleCreate = async (params: any) => {
-  console.log("🚀 ~ file: index.vue:30 ~ login ~ params:", params)
-};
 
 const handleClickItem = (values: any) => {
   const [long, lat] = values?.location?.coordinates || [];
@@ -50,7 +50,16 @@ const handleClickItem = (values: any) => {
   hospital.value.urlGoogleMaps = values.urlGoogleMaps || '';
   hospital.value.long = long || '0';
   hospital.value.lat = lat || '0';
-  isModalOpen.value = true;
+  counterStore.toggleModal(true);
+};
+
+const handleOpenModalCreate = () => {
+  isCreate.value = true;
+  counterStore.toggleModal(true);
+}
+
+const hlandleCreate = async (params: any) => {
+  await counterStore.createHospital(params);
 };
 
 const handleGetAllhospitals = async () => {
@@ -68,8 +77,11 @@ onMounted(() => {
   handleGetAllhospitals();
 });
 
-const openModal = (v: boolean = false) => {
-  isModalOpen.value = v;
+const toggleModal = (v: boolean = false) => {
+  if (!v) {
+    isCreate.value = false;
+  }
+  counterStore.toggleModal(v);
 };
 
 definePageMeta({

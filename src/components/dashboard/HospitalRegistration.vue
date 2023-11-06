@@ -42,6 +42,10 @@ export default {
       type: Function,
       required: true,
     },
+    isCreate: {
+      type: Boolean,
+      required: true,
+    },
   },
   data() {
     return {
@@ -57,10 +61,15 @@ export default {
       },
     };
   },
+  computed: {
+    hospitalData() {
+      return this.isCreate ? {} : this.hospital;
+    },
+  },
   methods: {
     submitHospital() {
       console.log(this.formData)
-      // this.submitFunction(this.formData);
+      this.submitFunction(this.formData);
     },
     closeModal() {
       this.closeModal(); // Llama a la función closeModal pasada como prop

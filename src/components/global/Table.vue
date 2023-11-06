@@ -81,13 +81,14 @@ export default {
     },
   },
   data() {
-    return {
-      totalPages: this.totalPages,
-    };
+    return {};
   },
   computed: {
     currentPage(): number {
       return this.currentPage;
+    },
+    totalPages(): number {
+      return this.totalPages;
     },
     paginatedData() {
       const start = (this.currentPage - 1) * this.totalPages;
