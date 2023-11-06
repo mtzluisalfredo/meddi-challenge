@@ -6,7 +6,6 @@
 export default {
   setup() {
     definePageMeta({
-      layout: 'auth',
       middleware: 'auth'
     })
 
